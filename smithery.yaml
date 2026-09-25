@@ -1,0 +1,12 @@
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      port:
+        type: number
+        description: Server port when running in HTTP mode
+        default: 3000
+  commandFunction:
+    node:
+      - server.ts

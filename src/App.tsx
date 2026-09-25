@@ -1618,14 +1618,15 @@ export default function App() {
                 <div className="p-4 bg-slate-900/40 border border-slate-800 rounded-xl text-xs space-y-2">
                   <div className="font-semibold text-slate-300 flex items-center space-x-1.5">
                     <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                    <span>Guardrails &amp; Specs</span>
+                    <span>Smithery.ai &amp; MCP Registry Integration</span>
                   </div>
                   <div className="text-slate-400 space-y-1">
-                    <div>• <strong>Protocol:</strong> Model Context Protocol 1.30.1</div>
-                    <div>• <strong>Transport:</strong> Streamable HTTP (Stateless)</div>
-                    <div>• <strong>Endpoints:</strong> POST /api/mcp (JSON-RPC), GET /api/mcp (SSE stream)</div>
+                    <div>• <strong>Registry:</strong> Configured for Smithery.ai (<code className="text-emerald-400 font-mono text-[11px]">smithery.yaml</code>)</div>
+                    <div>• <strong>Protocol:</strong> Model Context Protocol 1.30.1 (JSON-RPC 2.0)</div>
+                    <div>• <strong>Transport:</strong> Streamable HTTP (Stateless) + Server-Sent Events (SSE)</div>
+                    <div>• <strong>Tools Active:</strong> Google News, WHO, OECD, PubMed, Singapore Foresight</div>
                     <div>• <strong>CORS &amp; Preflight:</strong> Enabled (OPTIONS 204, wildcard origins)</div>
-                    <div>• <strong>Security:</strong> Read-only tools, no write, no keys exposed</div>
+                    <div>• <strong>Security:</strong> Read-only tools, no write, zero API keys required</div>
                   </div>
                 </div>
               </div>
