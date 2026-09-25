@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mcpHandler from './api/mcp.js';
+import { MCP_PATH, SERVER_INFO, DATASET } from './api/_lib/mcp-server.js';
 import { searchPubMed } from './lib/pubmed.js';
 import { fetchNews } from './lib/news.js';
 import { getWhoDemographics } from './lib/who.js';
@@ -184,6 +185,35 @@ async function startServer() {
       risks: STRATEGIC_RISK_ANALYSIS,
       source: 'Silver Pulse Singapore 2030-2035 Eldercare Foresight Engine',
       fetched_at: new Date().toISOString()
+    });
+  });
+
+  // Health check endpoint reporting MCP configuration and status
+  app.get('/api/health', (_req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).json({
+      status: 'ok',
+      mcp_path: MCP_PATH,
+      server: SERVER_INFO,
+      dataset: DATASET,
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Error handler for /api converting JSON errors into JSON-RPC responses
+  app.use('/api', (err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    res.setHeader('Content-Type', 'application/json');
+    if (err instanceof SyntaxError && 'body' in err) {
+      return res.status(400).json({
+        jsonrpc: '2.0',
+        error: { code: -32700, message: 'Parse error: Invalid JSON payload' },
+        id: null
+      });
+    }
+    return res.status(400).json({
+      jsonrpc: '2.0',
+      error: { code: -32600, message: err?.message || 'Invalid Request' },
+      id: null
     });
   });
 
