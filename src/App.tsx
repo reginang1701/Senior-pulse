@@ -1623,8 +1623,8 @@ export default function App() {
                   <div className="text-slate-400 space-y-1">
                     <div>• <strong>Protocol:</strong> Model Context Protocol 1.30.1</div>
                     <div>• <strong>Transport:</strong> Streamable HTTP (Stateless)</div>
-                    <div>• <strong>Method:</strong> POST /api/mcp</div>
-                    <div>• <strong>Non-POST response:</strong> 405 Method Not Allowed</div>
+                    <div>• <strong>Endpoints:</strong> POST /api/mcp (JSON-RPC), GET /api/mcp (SSE stream)</div>
+                    <div>• <strong>CORS &amp; Preflight:</strong> Enabled (OPTIONS 204, wildcard origins)</div>
                     <div>• <strong>Security:</strong> Read-only tools, no write, no keys exposed</div>
                   </div>
                 </div>

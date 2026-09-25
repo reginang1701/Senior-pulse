@@ -23,9 +23,8 @@ async function startServer() {
 
   app.use(express.json());
 
-  // MCP Server Endpoint: POST processes tool execution & protocol requests, GET returns 405
-  app.post('/api/mcp', mcpHandler);
-  app.get('/api/mcp', mcpHandler);
+  // MCP Server Endpoint: supports GET (SSE stream), POST (JSON-RPC), OPTIONS (CORS), and DELETE
+  app.all('/api/mcp', mcpHandler);
 
   // Existing Data Routes (calling shared functions directly)
   app.get('/api/pubmed', async (req, res) => {

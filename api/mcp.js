@@ -11,27 +11,35 @@ import {
 } from '../lib/foresight-singapore.js';
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    const errorResponse = {
-      jsonrpc: '2.0',
-      error: {
-        code: -32000,
-        message: 'Method not allowed'
-      },
-      id: null
-    };
+  // Set CORS headers for all MCP clients
+  if (typeof res.setHeader === 'function') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS, HEAD');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Expose-Headers', '*');
+  }
 
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
     if (typeof res.status === 'function') {
-      return res.status(405).json(errorResponse);
+      return res.status(204).end();
     }
-    res.writeHead(405, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(errorResponse));
+    res.writeHead(204);
+    res.end();
     return;
   }
 
-  // Ensure accept header satisfies Streamable HTTP requirements
-  if (req.headers && (!req.headers.accept || !req.headers.accept.includes('text/event-stream'))) {
-    req.headers.accept = 'application/json, text/event-stream';
+  // Adjust Accept header for MCP Streamable HTTP / SSE transport compliance
+  if (req.headers) {
+    if (req.method === 'GET') {
+      if (!req.headers.accept || !req.headers.accept.includes('text/event-stream')) {
+        req.headers.accept = 'text/event-stream';
+      }
+    } else if (req.method === 'POST') {
+      if (!req.headers.accept || !req.headers.accept.includes('text/event-stream')) {
+        req.headers.accept = 'application/json, text/event-stream';
+      }
+    }
   }
 
   const server = new McpServer({
