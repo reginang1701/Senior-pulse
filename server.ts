@@ -21,6 +21,36 @@ async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
+  // For /api/mcp, normalize Content-Type and Accept headers to ensure complete client tolerance
+  app.use('/api/mcp', (req, _res, next) => {
+    if (req.method === 'POST') {
+      const newRaw: string[] = [];
+      for (let i = 0; i < req.rawHeaders.length; i += 2) {
+        const k = req.rawHeaders[i].toLowerCase();
+        if (k !== 'content-type' && k !== 'accept') {
+          newRaw.push(req.rawHeaders[i], req.rawHeaders[i + 1]);
+        }
+      }
+      newRaw.push('Content-Type', 'application/json');
+      newRaw.push('Accept', 'application/json, text/event-stream');
+      req.rawHeaders = newRaw;
+      req.headers['content-type'] = 'application/json';
+      req.headers['accept'] = 'application/json, text/event-stream';
+    } else if (req.method === 'GET') {
+      const newRaw: string[] = [];
+      for (let i = 0; i < req.rawHeaders.length; i += 2) {
+        const k = req.rawHeaders[i].toLowerCase();
+        if (k !== 'accept') {
+          newRaw.push(req.rawHeaders[i], req.rawHeaders[i + 1]);
+        }
+      }
+      newRaw.push('Accept', 'text/event-stream');
+      req.rawHeaders = newRaw;
+      req.headers['accept'] = 'text/event-stream';
+    }
+    next();
+  });
+
   app.use(express.json());
 
   // MCP Server Endpoint: supports GET (SSE stream), POST (JSON-RPC), OPTIONS (CORS), and DELETE

@@ -29,15 +29,18 @@ export default async function handler(req, res) {
     return;
   }
 
-  // Adjust Accept header for MCP Streamable HTTP / SSE transport compliance
+  // Adjust headers for MCP Streamable HTTP / SSE transport compliance
   if (req.headers) {
     if (req.method === 'GET') {
       if (!req.headers.accept || !req.headers.accept.includes('text/event-stream')) {
         req.headers.accept = 'text/event-stream';
       }
     } else if (req.method === 'POST') {
-      if (!req.headers.accept || !req.headers.accept.includes('text/event-stream')) {
+      if (!req.headers.accept || !req.headers.accept.includes('text/event-stream') || !req.headers.accept.includes('application/json')) {
         req.headers.accept = 'application/json, text/event-stream';
+      }
+      if (!req.headers['content-type']) {
+        req.headers['content-type'] = 'application/json';
       }
     }
   }
