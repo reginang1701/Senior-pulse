@@ -1,0 +1,6 @@
+{
+  "name": "Silver Pulse",
+  "description": "Silver Pulse geriatric health intelligence, medical literature search, senior care news, and WHO demographics with Model Context Protocol (MCP) server integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
